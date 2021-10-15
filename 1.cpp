@@ -1,6 +1,7 @@
 #include<iostream>
 #include<limits>
 #include<math.h>
+#include<cstddef>
 const int sizes = 12; 
 using namespace std; 
 void implementation_defined(){
@@ -85,6 +86,39 @@ void char_literals(){
 	//char c1 = u'\x123'; 
 	//cout << a1 << b1 << c1 << endl; 
 }
+void integral_types(){
+	int a{12}; 
+	int b = 0xffff; 
+	int c = 012; 
+	cout << a << " " << b << " " << c << endl; 
+	long int k{123}; 
+	long long int k1 = 12LL; 
+	cout << k << k1 << endl; 
+	short int m = 1; 
+	cout << m << endl; 
+}
+void sizes1(){
+	cout << (sizeof(char) <= sizeof(bool) <= sizeof(short) <= sizeof(int)) << endl; 
+	cout << (sizeof(float) <= sizeof(double) <= sizeof(long long) <= sizeof(long double)) << endl; 
+	cout << (sizeof(int) == sizeof(signed int) == sizeof(unsigned int)) << endl; 
+	cout << (sizeof(char) <= sizeof(bool) <= sizeof(short) <= sizeof(int) <= sizeof(float) <= sizeof(long) <= sizeof(long long) <= sizeof(int*) <= sizeof(double) <= sizeof(long double)) << endl; 
+	int32_t a{123}; 
+	cout << a << endl; 
+	int64_t b{123123123}; 
+	cout << b << endl; 
+	int_least16_t c = 13; 
+	cout << c << endl; 
+	int_fast16_t f = 123; 
+	cout << f << endl; 
+	int arr[3]{1, 2, 3}; 
+	ptrdiff_t r = &arr[sizeof(arr)/sizeof(int)]-arr; 
+	cout << r << endl; 
+}
+template<class T>
+void* allocate(size_t sizet){
+	void* p = malloc(sizeof(T)); 
+	return p; 
+}
 int main(){
 	implementation_defined(); 
 	//undefined_behaviors(); 
@@ -95,5 +129,7 @@ int main(){
 	char_types_are_distict('A','B','C'); 
 	g('A', 'B', 'C'); 
 	char_literals(); 
+	integral_types(); 
+	sizes1(); 
 	return 0; 
 }
