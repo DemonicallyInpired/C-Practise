@@ -19,7 +19,20 @@ void pointers(){
 	cout << **arr4 << endl; 
 	cout << ptf(2) << endl; 
 }
+void* return_something(){//Pointer to object of unkown type about which we aren't allowed to make any assumptions. 
+	int a{12}; 
+	int* q = &a; 
+	return q; 
+}
+void* allocations(size_t sizes){
+	int* newsomething{new int[sizes]};
+	return newsomething; 
+}
 int main(){
 	pointers(); 
+	void* q = return_something(); 
+	//cout << *q << endl; //error compiler don't actualy know the type of the object pointed to. 
+	cout << *(static_cast<double*>(q)) << endl;//unsafe conversion of int* to double*
+	cout << *(static_cast<int*>(q)) << endl; //alright but still ugly 
 	return 0; 
 }
