@@ -40,6 +40,22 @@ void nullptrs(){
 	if(q || r || m){cout << "There is one pointer which is not null" << endl;}
 	else{cout << "cant derefernce the nullptr" << endl;}
 }
+void arrays(){
+	const int n = 7; 
+	// int arr[n]{}; //error array must be const bound sequence of object of given type in the memory, use vector, valarray or simply array. 
+	int arr[n]{}; //alrigth statically allocated array; 
+	int* q = new int[n]; //alright dynamically allocated array. 
+	delete[]q; //Much better if done with some encapsulated resoruce handler such as vector valarray or array. 
+	cout << arr[2] << endl; //acess the array index from 0 to n-1; 
+	//cout << arr[n+1] << endl;//accessing out of bound index range-checking is not guaranteed and usually expensive. 
+	int* r = arr; //array implictly converts to the pointer to the first element. 
+	cout << *r << endl;  
+	int arr1[n]{1, 2, 3, 4, 5, 6, 7}; //explict intialization; 
+	//int arr2[n]{1, 2, 3, 4, 5, 6, 7, 8}; //error: intialization with sulprus elements when the size is provided. 
+	int arr3[n]{1, 2, 3}; //alright rest of the elements are appended with zeros. 
+	//int arr4[n] = arr1; //error no builtin copy operation cant intialize the array with another array. 
+	//cant pass array by value due to implicit conversion rule. 
+}
 int main(){
 	pointers(); 
 	void* q = return_something(); 
@@ -47,5 +63,6 @@ int main(){
 	cout << *(static_cast<double*>(q)) << endl;//unsafe conversion of int* to double*
 	cout << *(static_cast<int*>(q)) << endl; //alright but still ugly 
 	nullptrs(); 
+	arrays(); 
 	return 0; 
 }
