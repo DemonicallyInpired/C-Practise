@@ -56,6 +56,26 @@ void arrays(){
 	//int arr4[n] = arr1; //error no builtin copy operation cant intialize the array with another array. 
 	//cant pass array by value due to implicit conversion rule. 
 }
+void string_literal(){
+	const char* name = "randomcrap"; 
+	//name[2] = 'A'; 
+	cout << name << endl; 
+	char names[]{"randomcrap"}; 
+	names[1] = 'R'; 
+	cout << (sizeof(name) == 11) << endl;
+	for(auto &i: names){cout << i;}
+	const char* name1 = "something"; 
+	const char* name2 = "something"; 
+	cout << (name1 == name2) << endl; //Check for the equality of the pointers.
+	const char* somethings = "abcdefghij"
+							 "klmnopqrst";
+	const char* randomnames = "random\00something"; 
+	cout << randomnames << endl; 
+	cout << somethings << endl;
+	cout << randomnames << endl;  
+}
+// String literals are statically allocated so, its safe to return one form the function 
+string error_no(int i){if(i){return "out of range error";}else{return "";} }
 int main(){
 	pointers(); 
 	void* q = return_something(); 
@@ -64,5 +84,7 @@ int main(){
 	cout << *(static_cast<int*>(q)) << endl; //alright but still ugly 
 	nullptrs(); 
 	arrays(); 
+	string_literal();
+	cout << error_no(12) << endl;  
 	return 0; 
 }
