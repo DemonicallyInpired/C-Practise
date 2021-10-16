@@ -195,6 +195,27 @@ void shadowing(){
 void badPractise(){
 	int x1 =x1; 
 }
+void intialization(){
+	int a{12}; //type deduced to be intializer_list<int> not int
+	vector<int>v1(12); //intialized with default int type for 12 elements, should not be confused with the default function call.
+	vector<int>v2{}; //v2 is an empty vector 
+	string s4; //has default construct so intialized to ""
+	char* p1{}; //p1 intialized to nullptr; 
+	static int i; //intialized to 0
+	cout << a << s4 << i << endl; 
+}
+void freestore(){
+	int* p = new int{}; 
+	int* q{new int[12]}; 
+	cout << *p << endl; 
+	cout << *q << endl; 
+	int randomcraps{}; 
+	string* s1{new string{}}; 
+	string s2; 
+	delete p; 
+	delete[] q; 
+	delete s1; 
+}
 int main(){
 	implementation_defined(); 
 	//undefined_behaviors(); 
@@ -216,6 +237,7 @@ int main(){
 	cout << somethingrandom::randomcrap << endl; 
 	print_vector(v1); 
 	shadowing();
-	badPractise();  
+	badPractise();
+	freestore();  
 	return 0; 
 }
