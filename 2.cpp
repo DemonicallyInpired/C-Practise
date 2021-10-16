@@ -28,11 +28,24 @@ void* allocations(size_t sizes){
 	int* newsomething{new int[sizes]};
 	return newsomething; 
 }
+// A pointer that doesn't points to anything. 
+// Usually donted with the nullptr; 
+// However, the previous use may involve using macro NULL or the (void*)0 which typically makes it illegal in C++
+// 0 can also be used as an overloaded instance of a function where int is to be overloaded with int*
+// NULL has different difination in different implementation in C it is usually 0 or 0L however, in C++ it is usually treated as void*(0) which makes it illegal in C++
+void nullptrs(){
+	int* q = nullptr; //since it doens't point to anything it can be derefernced
+	int* r = 0; 
+	int* m = NULL; 
+	if(q || r || m){cout << "There is one pointer which is not null" << endl;}
+	else{cout << "cant derefernce the nullptr" << endl;}
+}
 int main(){
 	pointers(); 
 	void* q = return_something(); 
 	//cout << *q << endl; //error compiler don't actualy know the type of the object pointed to. 
 	cout << *(static_cast<double*>(q)) << endl;//unsafe conversion of int* to double*
 	cout << *(static_cast<int*>(q)) << endl; //alright but still ugly 
+	nullptrs(); 
 	return 0; 
 }
