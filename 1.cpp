@@ -2,8 +2,25 @@
 #include<limits>
 #include<math.h>
 #include<cstddef>
-const int sizes = 12; 
+#include<vector>
 using namespace std; 
+
+const int sizes = 12; //global scope
+int randomc; //declreation without setting aside the memory or something as such!
+auto kk = 12; //declration that is also a defination meaining that it sets aside the memory or something as such
+const double pi{3.143}; 
+
+const char* name = "something"; 
+const char* names[]{"someting", "has", "been", "there"}; 
+vector<string>people{"Random", "crap"}; 
+
+struct something; 
+struct something{int a; float b; char c;};
+struct Date{int day; int month; int year;}; 
+int day(Date* d1){return d1->day; }
+constexpr int fact(int n){return(n < 2) ? 1: n* fact(n-1);}
+
+enum class Random{RANDOM, CRAP, THAT, HAS, BEEN, THERE}; 
 void implementation_defined(){
 	int a{12}; //well-defined
 	int b = 259; //implementation defined casuse the no of the bits in the char is implementation defiend. 
@@ -12,6 +29,11 @@ void implementation_defined(){
 	cout << pow(2, 32)/2 << endl; 
 	//static_assert(sizeof(int) < 3, "size of int is too samll or something"); 
 }
+struct HolesForInprovements{
+	int a; //4 bytets
+	char b; //5 bytes
+	float c; //structural padding of 3 bytes + 4 bytes = 12;
+};  
 void undefined_behaviors(){
 	int arr[sizes]{};
 	arr[sizes+sizes] = 'B';  
@@ -119,6 +141,60 @@ void* allocate(size_t sizet){
 	void* p = malloc(sizeof(T)); 
 	return p; 
 }
+int* unitialized_copy(vector<int>::iterator it1, vector<int>::iterator it2, int* buffer){
+	int count = 0; 
+	for(auto p = it1; p!= it2; p++){
+		buffer[count] = *p; 
+		count += 1; 
+	}
+	return buffer; 
+}
+void user(vector<int>&v1){
+	constexpr int buffmax = 1024; 
+	alignas(int) int buffer[buffmax]; 
+	const int maximum = min(v1.size(), buffmax/sizeof(int)); 
+	auto p = unitialized_copy(v1.begin(), v1.begin()+maximum, buffer); 
+	for(int i = 0; i < sizeof(p)/sizeof(int); i++){cout << p[i] << endl;}
+}
+alignas(32) struct People{
+	int a; 
+	char b; 
+	float c; 
+}; 
+void local_names(){
+	int a; //local name
+	float b; //local name
+	char c; //local name also called as the function scoped name
+}
+class Person{
+	private: 
+		int x, y; //class scope. 
+	public: 
+		Person(int x1, int y1): x{x1}, y{y1}{cout << x << y << endl; }
+		Person(): x{}, y{}{cout << x << y << endl;}
+		int return_1(){return 1;}//class scope; 
+};
+namespace somethingrandom{
+	int randomcrap = 12; //namespace scope; 
+}; 
+void print_vector(vector<int>&v1){
+	for(int i = 0; i < v1.size(); i++){cout << v1[i] << endl;}
+	for(vector<int>::iterator it = v1.begin(); it != v1.end(); it++){cout << *it << endl;}
+	for(auto &i: v1){cout << i << endl;}
+}
+int x1; 
+void shadowing(){
+	int x1 = 12; 
+	{
+		int x1 = 13; 
+		cout << x1 << endl; 
+	}
+	cout << x1 << endl; 
+	cout << ::x1 << endl; 
+}
+void badPractise(){
+	int x1 =x1; 
+}
 int main(){
 	implementation_defined(); 
 	//undefined_behaviors(); 
@@ -131,5 +207,15 @@ int main(){
 	char_literals(); 
 	integral_types(); 
 	sizes1(); 
+	cout << sizeof(HolesForInprovements) << endl; 
+	vector<int>v1{1, 2, 3, 4};
+	user(v1);  
+	cout << sizeof(People) << endl; 
+	Person p1{1, 2}; 
+	cout << p1.return_1() << endl; 
+	cout << somethingrandom::randomcrap << endl; 
+	print_vector(v1); 
+	shadowing();
+	badPractise();  
 	return 0; 
 }
