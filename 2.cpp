@@ -144,6 +144,10 @@ void Pointer_and_constant(){
 	cout << *p << endl; 
 	cout << *rr << endl;  
 }
+void Pointers_and_ownership(int* q){
+	//confused delete p or not, if its own a resource or being allocated onto the freestore than of course, delete it otherwise not;
+	delete q; 
+}
 int main(){
 	pointers(); 
 	void* q = return_something(); 
@@ -179,5 +183,10 @@ int main(){
 	randomtraversal(randomarray, 2); 
 	moresane_Traversal(&randomarray[0][0], 2, 3); 
 	Pointer_and_constant(); 
+	int* resource = new int{12}; 
+	Pointers_and_ownership(resource); //alright; 
+	//int* resource1 = &j; 
+	//Pointers_and_ownership(resourec1); //bad deleting the object allocated onto the stack whose lifetime is handled automatically; 
+	// To avoid such confusion always handled the lifetime of a directly controlled object in a well-behaved container such as a vector, string, valarray, or something alogn the lines. 
 	return 0; 
 }
