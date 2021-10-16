@@ -3,6 +3,7 @@
 #include<string.h>
 using namespace std; 
 int f(int a){return a;}
+//const int something_there; //error must be intialized; 
 void pointers(){
 	//Pointers are one of the adressing machenisms on any given implementation of the machine. 
 	int a{12}; 
@@ -131,6 +132,18 @@ void moresane_Traversal(int* arr, int dim1, int dim2){
 		cout << endl; 
 	}
 }
+void Pointer_and_constant(){
+	int a = 12; 
+	const int* p = &a; //OK pointer to const int 
+	int* const r = &a; //OK const pointer to int
+	const int* const rr = &a; //OK const pointer to const int
+	//*p = 13; //illegal cant do that 
+	*r = 13; //alright; 
+	//*rr = 13; //illegal cant modifiy const int. 
+	cout << *r << endl; 
+	cout << *p << endl; 
+	cout << *rr << endl;  
+}
 int main(){
 	pointers(); 
 	void* q = return_something(); 
@@ -165,5 +178,6 @@ int main(){
 	Two_D_Traversal(randomarray); 
 	randomtraversal(randomarray, 2); 
 	moresane_Traversal(&randomarray[0][0], 2, 3); 
+	Pointer_and_constant(); 
 	return 0; 
 }
