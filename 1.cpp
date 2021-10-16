@@ -216,6 +216,13 @@ void freestore(){
 	delete[] q; 
 	delete s1; 
 }
+void autos(){
+	vector<int>v1(100); 
+	for(vector<int>::iterator it = v1.begin(); it != v1.end(); it++){
+		cout << *it << " "; 
+	}
+	for(auto &i: v1){cout << i << " "; }
+}
 int main(){
 	implementation_defined(); 
 	//undefined_behaviors(); 
@@ -239,5 +246,6 @@ int main(){
 	shadowing();
 	badPractise();
 	freestore();  
+	autos(); 
 	return 0; 
 }
