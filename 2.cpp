@@ -85,6 +85,14 @@ int main(){
 	nullptrs(); 
 	arrays(); 
 	string_literal();
-	cout << error_no(12) << endl;  
+	cout << error_no(12) << endl;
+	string raw_strings = R"(This is something 		greate \n)"; 
+	string someother_raw_strings = R"***("something is there"())***"; 
+	cout << someother_raw_strings << endl; 
+	cout << raw_strings << endl;
+	string otherthings = R"("so, the raw string literals can contain 
+	new lines, huh?
+	cool!")"; 
+	cout << otherthings << endl;    
 	return 0; 
 }
