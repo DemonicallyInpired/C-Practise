@@ -4,6 +4,9 @@
 #include<cstddef>
 #include<vector>
 using namespace std; 
+using Pchar = char*; 
+using PTOF = int(*)(int); 
+typedef unsigned int uintr; 
 
 const int sizes = 12; //global scope
 int randomc; //declreation without setting aside the memory or something as such!
@@ -223,6 +226,29 @@ void autos(){
 	}
 	for(auto &i: v1){cout << i << " "; }
 }
+/*template<class T, class U>
+auto operator+(const Matrix<T>&m1, const Matrix<U>m2)->Matrix<decltype(T{}+U{})>{
+	Matrix<decltype(T{}+U{})>res; 
+	for(int i = 0; i != m1.rows(); i++){
+		for(int j = 0; j != m1.cols; j++){
+			res(i, j) = m1(i, j) + m2(i, j); 
+		}
+	}
+	return res; 
+}*/
+template<class T>
+void swapping(T& a, T& b){
+	T temp = static_cast<T&&>(a); 
+	a = static_cast<T&&>(b); 
+	b = temp; 
+}
+template<class T>
+void swapping1(T& a, T& b){
+	T temp = std::move(a); 
+	a = std::move(b); 
+	b = temp; 
+}
+int returning(int a){return a;}
 int main(){
 	implementation_defined(); 
 	//undefined_behaviors(); 
@@ -247,5 +273,20 @@ int main(){
 	badPractise();
 	freestore();  
 	autos(); 
+	vector<int>v11{1, 2, 3, 4}; 
+	vector<int>v12{4, 3, 2, 1}; 
+	swapping(v11, v12); 
+	for(auto &i: v11){cout << i << " "; }
+	cout << endl; 
+	for(auto &i: v12){cout << i << " "; }
+	swapping1(v11, v12); 
+	cout << endl; 
+	for(auto &i: v1){cout << i << " "; }
+	cout << endl; 
+	for(auto &i: v12){cout << i << " "; }
+	PTOF pf{&returning}; 
+	cout << pf(2) << endl; 
+	uintr p = 12;
+	cout << p << endl; 
 	return 0; 
 }
