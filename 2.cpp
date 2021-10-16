@@ -1,4 +1,6 @@
 #include<iostream>
+#include<vector>
+#include<string.h>
 using namespace std; 
 int f(int a){return a;}
 void pointers(){
@@ -40,6 +42,30 @@ void nullptrs(){
 	if(q || r || m){cout << "There is one pointer which is not null" << endl;}
 	else{cout << "cant derefernce the nullptr" << endl;}
 }
+void warchar_encodings(){
+	const char* file_path = R"(C:/home/something)"; //Raw string literal 
+	const char* file_path1 = u8"C://home//something"; //UTF8 string literal
+	const char* file_path2 = u8R"(C:/home/something)"; //Raw UTF8 string literal 
+	const char16_t* file_path3 =  u"C://home//something";//UTF-16 string literal  
+	const char32_t* file_path4 = U"C://home//something"; //UTF 32 string literal
+	const char32_t* file_path5 = UR"("C:/home/something_else")"; //Raw UTF-32 string literal
+	cout << file_path << " " << file_path1 << " " << file_path2 << " " << file_path3 << endl; 
+	cout << file_path4 << " " << file_path << endl; 
+}
+void Pointer_and_Arrays(){
+	int arr[]{1, 2, 3}; 
+	int* p = arr; //array name implcitly converts to the pointer to the first elements.
+	int* q = p+1; //alright but you can't perform any read or write operation on that. 
+	//int* r = p-1; //illegal 
+	//int *m = p+4; //illegal 
+	//Implict conversion of an array to the pointer to the first elements is usually the source of the subtle error and generally leads to losing the size of an array. 
+	vector<int>v1{1, 2, 3}; 
+	vector<int>v2{v1}; 
+	char somethings[]{"something"}; 
+	cout << strlen(somethings) << endl;
+	const char* something_else = "something"; 
+	cout << strlen(something_else) << endl;    
+}
 void arrays(){
 	const int n = 7; 
 	// int arr[n]{}; //error array must be const bound sequence of object of given type in the memory, use vector, valarray or simply array. 
@@ -55,6 +81,11 @@ void arrays(){
 	int arr3[n]{1, 2, 3}; //alright rest of the elements are appended with zeros. 
 	//int arr4[n] = arr1; //error no builtin copy operation cant intialize the array with another array. 
 	//cant pass array by value due to implicit conversion rule. 
+}
+void navigation(int arr[], int size){
+	for(int i = 0; i <size; i++){cout << arr[i] << " "; }
+	for(int* q = arr; q != &arr[(int)(sizeof(arr)/sizeof(int))]; q++){cout << *q << " "; }
+	for(int i = 0; i <size; i++){cout << *(arr+i) << endl; }
 }
 void string_literal(){
 	const char* name = "randomcrap"; 
@@ -76,6 +107,30 @@ void string_literal(){
 }
 // String literals are statically allocated so, its safe to return one form the function 
 string error_no(int i){if(i){return "out of range error";}else{return "";} }
+template<typename T>
+int return_bytes(T* p, T* q){
+	return reinterpret_cast<char*>(q)- reinterpret_cast<char*>(p); 
+}
+void Two_D_Traversal(int arr[2][3]){
+	for(int i = 0; i <2; i++){
+		for(int j = 0; j <3; j++){
+			cout << arr[i][j] << " "; 
+		}
+		cout << endl; 
+	}
+}
+void randomtraversal(int arr[][3], int dim1){
+	for(int i= 0; i< dim1; i++){
+		for(int j = 0; j< 3; j++){cout << arr[i][j] << " ";}
+		cout << endl; 
+	}
+}
+void moresane_Traversal(int* arr, int dim1, int dim2){
+	for(int i = 0; i< dim1; i++){
+		for(int j = 0; j <dim2; j++){cout << arr[i* dim2 + j] << " "; }
+		cout << endl; 
+	}
+}
 int main(){
 	pointers(); 
 	void* q = return_something(); 
@@ -94,5 +149,21 @@ int main(){
 	new lines, huh?
 	cool!")"; 
 	cout << otherthings << endl;    
+	warchar_encodings(); 
+	Pointer_and_Arrays(); 
+	int arr[3]{1, 2, 3}; 
+	navigation(arr, 3); 
+	int indexing[]{1, 2, 3}; 
+	int j = 1; 
+	cout << (indexing[j] == *(indexing+j)) << endl; 
+	cout << (j[indexing] == *(j + indexing)) << endl; 
+	cout << (j[indexing] == indexing[j]) << endl; 
+	int randomthings[]{1, 2, 3, 4}; 
+	cout << arr << " " << arr+2 << " " << return_bytes(arr, arr+1) << endl; 
+	cout << &arr[0] << " " << &arr[3] << " " << return_bytes(&arr[0], arr+3) << endl; 
+	int randomarray[2][3]{{1, 2, 3}, {4, 5, 6}}; 
+	Two_D_Traversal(randomarray); 
+	randomtraversal(randomarray, 2); 
+	moresane_Traversal(&randomarray[0][0], 2, 3); 
 	return 0; 
 }
