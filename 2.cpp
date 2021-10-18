@@ -148,6 +148,72 @@ void Pointers_and_ownership(int* q){
 	//confused delete p or not, if its own a resource or being allocated onto the freestore than of course, delete it otherwise not;
 	delete q; 
 }
+void lvalRef(){
+	int a = 12; 
+	int& a1 = a; 
+	a1 += 1; 
+	cout << a << endl; //changes made to a but not a1 cause a1 is not an object but a refernece to an object. A reference is only bound to the single object throughout its lifetime unlike pointers which may be 
+	// Bound to different objects throught its lifetime. 
+	int* ptrref = &a1; 
+	//we cant really take the pointer to the reference or somethign as such 
+	*ptrref += 1; 
+	cout << *ptrref << endl; 
+	cout << a << endl;
+	int x = 12; 
+	int y = 13; 
+	int z =13; 
+	int &x1 = x; 
+	int &y1 = y; 
+	int &z1{z};
+	//int arr[3]{x1, y1, z1}; //Since the refernces are not actually an object an array of referncecs is not allowed, i.e. generally of couurse. 
+}
+template<class T>
+class Vector{
+	private: 
+		T* elem; 
+		T sizes;  
+	public: 
+		T& operator[](const int& i){return elem[i]; }
+		T* begin(){return &elem[0]; }
+		T* end(){return &elem[0] + sizes; }
+		Vector(T* elem1, T size1): elem{elem1}, sizes{size1}{}; 
+		Vector(): elem{}, sizes{1}{};  
+};  
+template<class T>
+T const_ref(T value){
+	T temp = value; 
+	T& constref = temp; 
+	return temp; //returning soon to be disappearing temp and hence const references are often not safe, but they are constantly used in the function argument where we have to have a choice of passing //// 					either a const refernce or an lval refernce. 	
+}
+//Modifying the function argument.
+int badPractiseincrement(int& x){
+	x += 1; 
+	return x; 
+}
+int goodPractiseIncrement(int x){
+	return x+1; 
+}
+template<class K, class V>
+class Mapping{
+	private: 
+		vector<pair<K, V>>elem; 
+	public: 
+		vector<pair<K, V>>* begin(){return &elem[0]; }
+		vector<pair<K, V>>* end(){return &elem[0] + elem.size();}
+		V& operator[](const K& key){
+			for(int i = 0; i < elem.size(); i++){
+				if(elem[i].first == key){return elem[i].second;}
+			}
+			elem.push_back({key, V{}}); 
+			return elem.back().second; 
+		}
+}; 
+template<class T>
+void swapping(T& a, T& b){
+	T temp =  static_cast<T&&>(a); 
+	a =  static_cast<T&&>(b); 
+	b = temp; 
+} 
 int main(){
 	pointers(); 
 	void* q = return_something(); 
@@ -187,6 +253,37 @@ int main(){
 	Pointers_and_ownership(resource); //alright; 
 	//int* resource1 = &j; 
 	//Pointers_and_ownership(resourec1); //bad deleting the object allocated onto the stack whose lifetime is handled automatically; 
-	// To avoid such confusion always handled the lifetime of a directly controlled object in a well-behaved container such as a vector, string, valarray, or something alogn the lines. 
+	// To avoid such confusion always handled the lifetime of a directly controlled object in a well-behaved container such as a vector, string, valarray, or something alogn the lines.  
+	lvalRef(); 
+	int arrcrap[3]{1, 2, 3}; 
+	Vector<int>v1{arrcrap, 3}; 
+	cout << v1[2] << endl; 
+	cout << "Traversing the vecot or something as such" << endl; 
+	for(auto& i: v1){cout << i << endl;}
+	int aref =12; 
+	int kref = const_ref(aref);
+	int constref = const_ref(12); 
+	cout << kref << endl; 
+	cout << constref << endl; 
+	kref += 1; 
+	cout << aref << endl;
+	
+	int dummy = 12; 
+	badPractiseincrement(dummy); //No idea what is actually happening here. 
+	cout << dummy << endl; 
+	dummy = badPractiseincrement(dummy); //alright incrementing while returning the value from the function.  
+	cout << dummy << endl; 
+	Mapping<string, int>m1; 
+	for(string str; cin >> str;){m1[str] += 1; if(str == "Z"){break;}}
+	//for(auto& i: m1){cout << i.first << " " << i.second << endl;}
+	vector<int>test{1, 2, 3, 4, 5}; 
+	vector<int>test1{1, 2, 3, 4, 5}; 
+	swapping(test, test1); 
+	for(int i = 0; i< test.size(); i++){
+		cout << test[i] << " "; 
+	}
+	cout << endl; 
+	for(auto &i: test1){cout << i << " "; }
 	return 0; 
 }
+
