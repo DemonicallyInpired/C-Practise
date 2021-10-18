@@ -213,7 +213,21 @@ void swapping(T& a, T& b){
 	T temp =  static_cast<T&&>(a); 
 	a =  static_cast<T&&>(b); 
 	b = temp; 
-} 
+}
+class useless{
+	private: 
+		int x, y; 
+	public: 
+		useless(): x{}, y{}{cout << x << " " << y << endl;}
+		useless(int x1, int y1): x{x1}, y{y1}{cout << x << " " << y << endl;}
+		//auto operator+(const useless& u1, const useless& u2); 
+		//~useless(); 	
+}; 
+//auto useless::opeartor+(const useless& u, const useless& u2){return {u1.x + u2.x, u1.y + u2.y}; }
+//bad explict nullreference dont write such code
+char* indeint(char* p){
+	return p; 
+}
 int main(){
 	pointers(); 
 	void* q = return_something(); 
@@ -284,6 +298,9 @@ int main(){
 	}
 	cout << endl; 
 	for(auto &i: test1){cout << i << " "; }
+	useless u1{1, 2}; 
+	useless u2{3, 4}; 
+	//char& nullref{*indent(nullptr);}
 	return 0; 
 }
 
