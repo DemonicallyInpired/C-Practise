@@ -1,5 +1,7 @@
 #include<iostream>
 #include<vector>
+#include<ostream>
+#include<cstring>
 using namespace std; 
 // Can be thought of the user define type or sort of a datastructure to store element of arbitary types and can apply structural padding to improve memory layout, unlike array which is a fixed sequence of objects in the memory. 
 // You can thought of structure as a class where all the member are public by default, thus you can define constructor for it, member function or even an overloaded operator. 
@@ -95,6 +97,7 @@ ArraysEx shift(ArraysEx e1, ArraysEx e2){
 	}
 	return e1; 
 }
+// One of the distadventage of using std::array over the array is that we cant deduce the no of elements form the intializer itself as in case of fhe array with no given elements. 
 template<typename T, size_t N>
 struct StdArrays{	 
 	public: 
@@ -105,6 +108,23 @@ struct StdArrays{
 		T& operator[](const int& i){return elem[i];}
 		//const T& operator[](const int& i)const{return elem[i];}
 }; 
+// Two struct are different type even when they have the identiacal defination as such we can really intialize two different isntance of the struct cause thety are used to define different user-defined types. 
+
+//A Plain odd data could be considereed just as dataa without having to worry about other runtime polymorphisms things such as it being having a default construct, move semantics, copy seamntics, etc. One of the reason to consider
+// the plain odd data is to facilate inexpensive copy operation as a block of memeory such as memcpy rather than copy constructor call to move the data around. So a plain odd data can be considered just as data without having to worry
+// about user-defined seamantics for construction and copy operations. 
+// To check wheter somtehing is a pod which is a standard library type predicate defined in the <type_traits> allowing us to ascertain wheter something is a pod or not for instance.
+template<class T>
+void mycopy(T* to, T* form, int count){
+	if(std::is_pod<T>::value){
+		memcpy(to, form, sizeof(T)*count); 
+	}
+	else{
+		for(int i= 0; i< count; i++){
+			to[i] = form[i]; 
+		}
+	}
+}
 int main(){
 	Address A1{123, "something", {'A', 'B', 'C', 'D'}, 123.3f, 'R'}; 
 	Address* A2 = &A1; 
@@ -134,5 +154,10 @@ int main(){
 	for(int i = 0; i< 3; i++){cout << shifted.p1[i].x << " " << shifted.p1[i].y << endl;}
 	StdArrays<Point, 3>stdArrays{{{1, 2}, {3, 4}, {4, 5}}}; 
 	Point pp{5,6}; 
+	
+	int arr[3]{1, 2, 3}; 
+	int arr1[3]{};
+	mycopy(arr1, arr, 2); 
+	for(int i = 0; i < 3; i++){cout << arr1[i] << " "; }
 	return 0; 
 }
