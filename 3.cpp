@@ -238,6 +238,7 @@ enum class Lights{RED = 1, GREEN = 2, YELLOW = 13}; //since members are tightly 
 enum class Something:char; 
 
 enum class Something:char{RANDOM, CRAP}; 
+enum{PLAIN, CONSTANT}; 
 void f(Colors C){
 	//C c1 = 12; error no Color->int conversion allowed
 	//int c2 = GREEN; //error GREEN is not in the scope
@@ -273,6 +274,22 @@ void check_colors(Colors c1){
 			cout << "Invalid Color"; 
 	}
 }
+// Plain Enum: Plain enum are what the older C++ offers before the introduction of enum classes, as such plain enum have scope of that of their defination, meaing they
+// are inherintly susecptable to namespace pollution. More so they implcitly converts to the integral value, and much like enum classes they memeer can be intilized to the suitable
+// integral value in which case the range range for any enum member will be [0: 2^k-1] where 2^k defines the range just greater than the largest enumerator as defined in the enumeration, 
+// However, if the enuemration contains the negitive enuemrator the range could lie from [-2^k, 2^k-1]. 
+// We can declare the enumerator with the suitable integral type before defining it. 
+// szize of the enumerator is usually deduced to be the size of its assigned type, however in most of the case where the type is missing the size is that of the default type i.e. int. 
+// Since the plain enum are not tightly scoped to its own enclosing scope we cant have two different enum with same enuumerator. 
+// we can also skip the enumeration name to render it to be used as just named constant rather than an object wrapping around the named constants. 
+
+enum randomcolors{RED_COL, GREEN_COL, YELLOW_COL}; 
+enum new_colrs{SKYBLUE, PURPLE, GREEN}; 
+enum explict_values{ORANGE = 1, VIOLET = 13, JASMINE = -12}; //range -2^4 to 2^4-1
+enum explict_values1{ORANGES = 1, VIOLET1 = 13, JASMINE1 = 28}; //range 0 to 2^5-1
+enum use_before_declration: char;
+enum use_before_declration:char{SOMETHING, CRAPPY};  
+//enum ranomerror{GREEN}; namespace pollution  
 int main(){
 	Address A1{123, "something", {'A', 'B', 'C', 'D'}, 123.3f, 'R'}; 
 	Address* A2 = &A1; 
@@ -334,5 +351,9 @@ int main(){
 	Lights l4 = static_cast<Lights>(12); //OK within the range
 	//Lights l5 = static_cast<Lights>(999); //error outside of the enum range. 
 	cout << static_cast<int>(l4) << endl; 
+	cout << RED_COL << " " << GREEN_COL << " " << YELLOW_COL << endl; //implictly converts to int and hence we dont really need to defined bitwise logical operator for them. 
+	cout << sizeof(randomcolors) << endl; 
+	cout << sizeof(use_before_declration) << endl; 
+	cout << PLAIN << " " << CONSTANT << endl; 
 	return 0; 
 }
