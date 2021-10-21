@@ -125,6 +125,103 @@ void mycopy(T* to, T* form, int count){
 		}
 	}
 }
+//used to store the information much more compactly in certain scenario such as storing a date or something. 
+// bitfiled represents the no of the bits required to represent the variable or something. 
+// bitfiled data structures can't be addressed since they are not allocated on the regular word boundary. 
+// code need to maintain bitfiled usually increases significantlly as compared to the normal data types. 
+struct bitfiled{
+	bool something: 1; 
+	int a: 3; 
+	char p: 1; 
+};
+//unions: Are the way to save some more memory per say and they are often used in such a way that each of their member actually points to the same memory address. And since each of the member points to thte same memory address we can only access one memeber at a time and hte we need to be explicit about the representation of that member. It is practically useful when wrapped around some bettter behaved data structure such as a struct or something as such. For the other parts, the union is rather a failrly simple user-defined type and it can only exisist in cornation to some bounds on it which are as follows: 
+
+// a.) You can intialized atmost one of the memeber variable within the union. 
+// b.) User-defined constructor semantics i.e. the copy and the move operation is not allowed for any of such union members, for such members default constructor, copy and move semantics is often deleted.  
+// c.) A union cant really have a base calss or something along that line. 
+// d.) A Union cant really have a virtual function inside of it. 
+// ALl of these restriction im[posed on the union often made it quite hard to use, yet they are most often missued in some of the case for example implictly hacking to convert and int to int* (not a good idea cause they are stored on a completely differnet architectural boundraies.)
+
+union randomthings11{
+	int a;  
+	float b; 
+	const char* somethingrandom; 
+	//float b =13;//Not allowed can have atmost one intailized member variable.  
+	//complex<int>d1; //not allowed deleted constructor
+	//string s; //not allowed delted constructor or having a default constructor
+}; 
+union fudge{
+	int a; 
+	int* b; 
+};
+// Anonymus union: 
+class Entry2{
+	private: 
+		enum class Tag{NUM, STR};
+		Tag types; 
+	public: 
+		union{ //Annonymus union that is a union without any sort of name or something as such
+			// An annonymous union usually correponds to an object rather than a type, meaning we can use its members without specifying the object name. 
+			int a; 
+			string s; //since the string has a user-defined copy and move semantics that are often deleted in the union we need to redefine them to use union members or to initialize the union members. 
+		};
+		~Entry2(); 
+		Entry2& operator =(Entry2& ee); 
+		Entry2(const Entry2&); 
+		
+		int get_number() const; 
+		string get_string() const; 
+		
+		void set_num(int n);
+		void set_string(const string& ss);  
+		struct Bad_entry{};  
+}; 
+
+int Entry2::get_number() const{
+	if(types != Tag::STR){throw Bad_entry{};}
+	return a; 
+}
+string Entry2::get_string() const{
+	if(types != Tag::NUM){throw Bad_entry{}; }
+	return s; 
+}
+
+void Entry2::set_num(int n){
+	if(types == Tag::STR){
+		s.~string(); 
+		types = Tag::NUM;
+	}
+	a = n; 
+}
+void Entry2::set_string(const string& ss){
+	if(types == Tag::STR){
+		s = ss; 
+	}
+	else{
+		new(&s)string{ss}; 
+		types = Tag::STR; 
+	}
+}
+Entry2& Entry2::operator =(Entry2& ee){
+	if(types == Tag::STR && ee.types == Tag::STR){
+		s = ee.s; 
+		return *this; 
+	}
+	if(types == Tag::STR){s.~string();}
+	switch(ee.types){
+		case Tag::NUM: 
+			a = ee.a; 
+			break; 
+		case Tag::STR: 
+			new(&s)string{ee.s}; 
+			ee.types = Tag::STR; 
+			break; 
+	}
+	return *this; 
+}
+Entry2::~Entry2(){
+	if(types == Tag::STR){s.~string();}
+}
 int main(){
 	Address A1{123, "something", {'A', 'B', 'C', 'D'}, 123.3f, 'R'}; 
 	Address* A2 = &A1; 
@@ -159,5 +256,21 @@ int main(){
 	int arr1[3]{};
 	mycopy(arr1, arr, 2); 
 	for(int i = 0; i < 3; i++){cout << arr1[i] << " "; }
+	cout << endl; 
+	cout << "The size of the bitfiled is:: " << endl; 
+	cout << sizeof(bitfiled) << endl; 
+	//bitfiled* m1;: error cant address bitfiled.  
+	randomthings11 r11; 
+	r11.a = 12.33; 
+	cout << "Both of the union members have the same address" << endl; 
+	cout << &r11.a << endl; 
+	cout << &r11.b << endl;  
+	cout << sizeof(randomthings11) << endl; //sizeof the union is that of its largest member. 
+	cout << *reinterpret_cast<int*>(&r11.b) << endl; //ugly but that the way to use float when its intialized to point to an int. 
+	fudge f1; 
+	int randomsomething = 12; 
+	f1.b = &randomsomething;
+	cout << *(f1.b) << endl;
+	cout << *(&f1.a) << endl;   
 	return 0; 
 }
