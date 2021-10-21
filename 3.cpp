@@ -222,6 +222,57 @@ Entry2& Entry2::operator =(Entry2& ee){
 Entry2::~Entry2(){
 	if(types == Tag::STR){s.~string();}
 }
+	
+// Enumerations: An enumeration is a user-defined type used to hold a set of named constant for instance constant used as flags in programming to provide a meaninful, 
+// semantics to such flags; The member of enum generally have integral types such as char, bool, int, etc and generally itnialized to the relevant integral value in the order of the member variable declration. 
+// They are generally of two types: 
+// Enum classes: Here the member are tightly scoped to the enumeration itself and doesn't implictly converts to integer that is if needed user might need to recast them to the integral values. Thus, assigning an integral value to enum class type without explict conversion is an error. 
+// Plain Enum: They have the scope that of their enum declration that is the scope in which enum is being declared and their members converts to the integral value. 
+// Assigning a value outside of the range of an enum to a enum class or enum member is of course an error
+// we can explictly define the type of the enum class, however the default type for an enum class instance is of course an integer. 
+// An integral value can be casted into an enumeration value however, the result of such value is usually undefined if the integral value lies outside of the range of the enumeration values. 
+// Enum classes much like an of the other user-defined type can be declared without their complete defination, however, using such incomplete defination is ofcourse an error. 
+// The size of the enum class is the size of its resolved type
+enum class Colors{RED, GREEN, YELLOW}; 
+enum class Lights{RED = 1, GREEN = 2, YELLOW = 13}; //since members are tightly scope to that of the scope of the emum it is not an error to define same member name for two different enum classes; 
+enum class Something:char; 
+
+enum class Something:char{RANDOM, CRAP}; 
+void f(Colors C){
+	//C c1 = 12; error no Color->int conversion allowed
+	//int c2 = GREEN; //error GREEN is not in the scope
+	//int c3 = Colors::GREEN; error not int->Color conversion 
+	Colors c2 = C; //OK assign Colors to Colors
+	static_cast<int>(Colors::RED)== 0; 
+	static_cast<int>(Colors::GREEN)==1; 
+	static_cast<int>(Colors::YELLOW) ==2; 
+}
+// The values for an enum class are usually integral so bitwise logical operations applies on it but, since its a user-defined type, we have to define them by ourselves
+
+constexpr Colors operator &(Colors c1, Colors c2){
+	return(static_cast<Colors>(static_cast<int>(c1) & static_cast<int>(c2))); 
+}
+constexpr Colors operator|(Colors c1, Colors c2){
+	return(static_cast<Colors>(static_cast<int>(c1) | static_cast<int>(c2)));
+}
+void check_colors(Colors c1){
+	switch(c1){
+		case Colors::RED: 
+			cout << "Its the red color"; 
+			break; 
+		case Colors::GREEN: 
+			cout << "Its the green color"; 
+			break;
+		case Colors::YELLOW: 
+			cout << "Its the greeen color"; 
+			break; 
+		//case Colors::RED&Colors::GREEN: 
+			//cout << "Great got all of the colors"; 
+			//break;
+		default: 
+			cout << "Invalid Color"; 
+	}
+}
 int main(){
 	Address A1{123, "something", {'A', 'B', 'C', 'D'}, 123.3f, 'R'}; 
 	Address* A2 = &A1; 
@@ -272,5 +323,16 @@ int main(){
 	f1.b = &randomsomething;
 	cout << *(f1.b) << endl;
 	cout << *(&f1.a) << endl;   
+	Colors c1; 
+	f(c1); 
+	cout << sizeof(Colors) << endl; 
+	cout << sizeof(Lights) << endl; 
+	
+	Lights l1{}; //l1 got the default value i.e. 0
+	//Lights l2 = Lights{12}; //error narrowing conversion 
+	//Lights l3 = 12; //error cant convert from Lights->int
+	Lights l4 = static_cast<Lights>(12); //OK within the range
+	//Lights l5 = static_cast<Lights>(999); //error outside of the enum range. 
+	cout << static_cast<int>(l4) << endl; 
 	return 0; 
 }
