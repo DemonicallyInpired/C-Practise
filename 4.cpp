@@ -122,6 +122,21 @@ void declration_in_condition(){
 	for(i = 0; i< 12; i++){cout << i << endl;}
 	i += 13; //allow modification after the inteded use.
 }
+void range_for_loops(){
+	// Range for loops are delibrately simple constructor that are use to loop over a range of values. 
+	// They generally looks for begin() and end() definations that return the pointers to the begining and the end of the container respectively to determine the range to loop through that is [begin, end) where end = begin()+N, for N elements in the container. 
+	// However, if for the given sequence begin, and end are not defined using range for loop is of course an error;
+	// More so range for loop are quite a simple constructor and can touch only single value in the sequence at a time, thus, if we need to two more than two values or traverse two range at a time we should use for loops. 
+	vector<int>v{1, 2, 3,4}; 
+	for(auto &i: v){cout << i << endl;}
+	for(vector<int>::iterator it = v.begin(); it != v.begin()+v.size(); it++){cout << *it << endl;}
+}
+template<class T>
+T accumulate(vector<T>&accum){
+	int summition = 0; 
+	for(auto &i: accum){summition += i;}
+	return summition; 
+}
 int main(){
 	vector<string>something{"something", "12"};
 	const char* p = "12"; 
@@ -134,6 +149,9 @@ int main(){
 	cout << maximum(12, 13); 
 	f1(12); 
 	g(12); 
-	declration_in_condition(); 
+	declration_in_condition();
+	vector<int>v1{1, 2, 3};  
+	range_for_loops(); 
+	accumulate(v1); 
 	return 0; 
 }
