@@ -137,6 +137,21 @@ T accumulate(vector<T>&accum){
 	for(auto &i: accum){summition += i;}
 	return summition; 
 }
+template<class T>
+T find_max(T* arr, size_t sizes){
+	T maximum = arr[0]; 
+	for(int i = 1; i< sizes; i++){if(arr[i] > maximum){maximum = arr[i];}}
+	return maximum; 
+}
+void to_ascii(){
+	for(char c; cin >> c;){cout << static_cast<int>(c) << endl; if(c == 'Z'){break;}}
+}
+void forever(){
+	for(;;){cout << 1 << " ";}
+}
+void forever1(){
+	while(true){cout << 1 << " ";}
+}
 int main(){
 	vector<string>something{"something", "12"};
 	const char* p = "12"; 
@@ -153,5 +168,10 @@ int main(){
 	vector<int>v1{1, 2, 3};  
 	range_for_loops(); 
 	accumulate(v1); 
+	int arr[3]{1, 2, 3}; 
+	cout << find_max(arr, 3) << endl; 
+	to_ascii(); 
+	//forever(); 
+	//forever1(); 
 	return 0; 
 }
