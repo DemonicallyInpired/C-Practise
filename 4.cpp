@@ -27,6 +27,11 @@ void randomfunction(){
 }
 // The most common reason to declare the variable without intialization is that it requires the statement to give it desired value. The input variable, 
 // is amongst the most few reasonable examples for that. 
+// A branch of the if statement cant be just a declration and if we tend to introduce a name in the branch it must be enclosed within the block. 
+void f1(int a){
+	//if(a) int x =12; cout << x << endl;  
+	if(a){int x =12+a; cout << x << endl;}
+}
 void initalize_buffer(){
 	const int max1 = 10;
 	char buff[max1]; 
@@ -36,7 +41,21 @@ void initalize_buffer(){
 		else if(count == max1){throw std::runtime_error("Buffer overflow");}
 		else if(count >= max1+1){break;}
 		else{buff[count++] = i;}
-	}
+		}
+}
+// If-else conditional statement checks for a boolean predicate if that predicate is true, the if clause of statement is executed
+// with utmost eclat otherwise, the else is rednered. Usually a type other than boolean in if clause can be implictlly converted to the required boolean type, 
+// however, since enum classes are strongly scoped and doesn't allow implict conversion to the boolean variable, it is often not allowed, to be a part of the if clause. 
+enum class e1{random, things}; 
+void enum_clause(){
+	if(static_cast<int>(e1::random) || static_cast<int>(e1::things)){cout << "something is present" << endl;}//no implicit conversion to bool
+	//else if(e1){cout << "alright!" << endl;} no implicit conversion to int or bool
+	else{cout << "nothing is present" << endl; }
+}
+// Logical operators such as && and || are lazily evaluated i.e. if their first operand is true they are rendered true without checking the second operand. 
+// For choosing between the two alterantives, conditional expression is more direct, for instance: 
+int maximum(int a, int b){
+	return(a > b) ? a : b; 
 }
 int main(){
 	vector<string>something{"something", "12"};
@@ -45,6 +64,9 @@ int main(){
 	f(something, i, p);
 	randomfunction(); 
 	cout << s << endl;  
-	initalize_buffer(); 
+	//initalize_buffer(); 
+	enum_clause(); 
+	cout << maximum(12, 13); 
+	f1(12); 
 	return 0; 
 }
