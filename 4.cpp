@@ -115,6 +115,13 @@ void g(int i){
 	}*/
 	// If we want the use of variable within the switch statement, we can limit its scope by enclosing its declration within a block. 
 }
+void declration_in_condition(){
+	// To avoid missue of a variable its often recommended to contain it to the smallest plausible scope one of such use case is to intialize the variable within the conditional stament to prevent its modification.
+	for(int i = 0; i< 12; i+=1){cout << i << endl;}//limited to the statement block scope
+	int i = 12; 
+	for(i = 0; i< 12; i++){cout << i << endl;}
+	i += 13; //allow modification after the inteded use.
+}
 int main(){
 	vector<string>something{"something", "12"};
 	const char* p = "12"; 
@@ -127,5 +134,6 @@ int main(){
 	cout << maximum(12, 13); 
 	f1(12); 
 	g(12); 
+	declration_in_condition(); 
 	return 0; 
 }
