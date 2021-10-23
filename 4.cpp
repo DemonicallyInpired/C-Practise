@@ -163,6 +163,17 @@ int finding(Iter first, Iter last, Value val){
 	}
 	return count;  
 }
+void loop_exits(){
+	//Loop exits are generally used to exit the loops in between without the completing of the loop condition in accordance to some user logic. 
+	// usually C++ provide two ways for loop exit: 
+	// break; it exit the loop in between in accordance to the condition specified the user. 
+	// continue: It doesn't exit the loop completely but skip the rest of the statements following it for the givrn iteration. 
+	for(char ch; cin >> ch;){
+		if(ch == 'Z' || ch == 'A'){break;}
+	}
+	for(int i = 0; i< 12; i++){if(i == 5){continue;}else{cout << i << endl;}}
+}
+void gotos(){}
 void do_whiles(const char* strings, int sizes){
 	// do while are the source of subtle error cause they often execute once no matter what while assuming at the same
 	// time that the condition must exisit atleast for the firt time, which might not often be the case. Therefore, I 
@@ -200,5 +211,6 @@ int main(){
 	cout << finding(begin, end, 3) << endl;
 	const char* names = "randomthings";   
 	do_whiles(names, strlen(names));
+	loop_exits(); 
 	return 0; 
 }
