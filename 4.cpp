@@ -57,6 +57,64 @@ void enum_clause(){
 int maximum(int a, int b){
 	return(a > b) ? a : b; 
 }
+// switch statements are generally used to select amongst a set of alternatives cases(which may be a const expression, integral or enumerator). 
+// A value inside the case-label may not be used more than once. 
+// For example: 
+void g(int i){
+	// A switch statement can thus be alternatively written as a series of if else clases. 
+	// However, it is generally more readable and generate more compact-code in the obvious, 
+	// cases that requires to check a set of statement against a single value, cause switch statement requires a single jump-table to check its cases rahter than repeadtly checking the conditional branches.  
+	switch(i){
+		case 0: 
+			cout << "even" << endl; 
+			break;
+		case 1: 
+			cout << "odd" << endl; 
+			break;
+		default: 
+			cout << "something" << endl; 
+	}
+	// beware that the case may be terminated somehow(either with the break statement or the return statement), unless carrying out the execution is intentional in which case, the intention must be commneted to avoid confusion. 
+	switch(i){
+		case 0: 
+			cout << "even" << endl; 
+		case 1: 
+			cout << "odd" << endl; //intentional fallback
+			break; 
+		default: 
+			cout << "soemthing else" << endl; 
+	}
+	// default cases are generally used to catch any sort of an error or provide fallbacks, i.e. every valid things are covered by cases. 
+	// It is almost always a good idea to provide a default fallback, however, one can't advocate the same in case of the enumerator in case value, 
+	// in which case leaving the default case might provide compiler a chance to warn againt a set of values that almost but not quite match against the set of enumerators.
+	// for example: 
+	e1 v = e1::random; 
+	switch(v){
+		case e1::random: 
+			cout << static_cast<int>(e1::random) << endl; 
+			break; 
+		case e1::things: 
+			cout << static_cast<int>(e1::things) << endl; 
+			break;
+		/*default: 
+			//opps it allows missing enumerator values
+			cout << "crap" << endl; */
+	} 
+	// It is possible and a common practise to declare variable within the switch cases, however, 
+	// it is not possible to bypass such variables. 
+	/*switch(i){
+		case 0: 
+			int x; 
+			int y = 3; //error declration can be bypassed if i = 1 implictly initialized. 
+		case 1: 
+			x += 1; //error use of unitialized_variables
+			y += 1; 
+			break; 
+		default: 
+			cout << "random crap" << endl; 
+	}*/
+	// If we want the use of variable within the switch statement, we can limit its scope by enclosing its declration within a block. 
+}
 int main(){
 	vector<string>something{"something", "12"};
 	const char* p = "12"; 
@@ -68,5 +126,6 @@ int main(){
 	enum_clause(); 
 	cout << maximum(12, 13); 
 	f1(12); 
+	g(12); 
 	return 0; 
 }
