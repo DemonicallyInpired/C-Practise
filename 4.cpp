@@ -152,6 +152,16 @@ void forever(){
 void forever1(){
 	while(true){cout << 1 << " ";}
 }
+template<class Iter, class Value>
+int finding(Iter first, Iter last, Value val){
+	// they executes unitl the condition within the loop becomes false; 
+	// preffer to use while stement over for statements where there isnt an obvious loop variable. 
+	int count = 0; 
+	while(first != last && *first != val){
+		++first; count++; 
+	}
+	return count;  
+}
 int main(){
 	vector<string>something{"something", "12"};
 	const char* p = "12"; 
@@ -173,5 +183,9 @@ int main(){
 	to_ascii(); 
 	//forever(); 
 	//forever1(); 
+	vector<int>v2{1, 2, 3, 4, 5}; 
+	vector<int>::iterator begin = v1.begin(); 
+	vector<int>::iterator end = v1.end(); 
+	cout << finding(begin, end, 3) << endl; 
 	return 0; 
 }
