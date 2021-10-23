@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include<string.h>
 using namespace std; 
 // C++ offers a conventation way of expressing statements, usually all that is interesting and compicated
 // is often found in the expression or the declration and statements have a little to do with anything, 
@@ -162,6 +163,16 @@ int finding(Iter first, Iter last, Value val){
 	}
 	return count;  
 }
+void do_whiles(const char* strings, int sizes){
+	// do while are the source of subtle error cause they often execute once no matter what while assuming at the same
+	// time that the condition must exisit atleast for the firt time, which might not often be the case. Therefore, I 
+	// recommend avoding do whiles whereever plausible .
+	cout << "{"; 
+	do{
+		cout << strings[--sizes]; 
+	}while(sizes); //clearly, what will happen if string has no element, it will still execute once?
+	cout << "}"; 
+}
 int main(){
 	vector<string>something{"something", "12"};
 	const char* p = "12"; 
@@ -186,6 +197,8 @@ int main(){
 	vector<int>v2{1, 2, 3, 4, 5}; 
 	vector<int>::iterator begin = v1.begin(); 
 	vector<int>::iterator end = v1.end(); 
-	cout << finding(begin, end, 3) << endl; 
+	cout << finding(begin, end, 3) << endl;
+	const char* names = "randomthings";   
+	do_whiles(names, strlen(names));
 	return 0; 
 }
