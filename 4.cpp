@@ -165,7 +165,7 @@ int finding(Iter first, Iter last, Value val){
 }
 void loop_exits(){
 	//Loop exits are generally used to exit the loops in between without the completing of the loop condition in accordance to some user logic. 
-	// usually C++ provide two ways for loop exit: 
+	// usually C++ provide two ways for loop exit in addition to the return statement inside of a function of course: 
 	// break; it exit the loop in between in accordance to the condition specified the user. 
 	// continue: It doesn't exit the loop completely but skip the rest of the statements following it for the givrn iteration. 
 	for(char ch; cin >> ch;){
