@@ -37,6 +37,7 @@ void bitwise_operators(int a, int b){
 }
 // Result of the mixmatch of the operand tpyes involved in a full-expression is that of the largest type meaning if int, float and long are involved in an expression it would caculated with long double //arthematics. Bools and char are generally converted to int in the arthematic expressions. Moreover, wherever logically feasible the result of an operator taking an lval is an lval. 
 //Implementation dont really have to check for the overflow and most of them rarely do that for instance in the below example the value of a is increment to the point where it become not fesible for the itegral type to hold it thereby eventually leading to unfortunate conversions as required to represent the value in the integral equivalent. 
+// In particular some of such subtilites such as underflow, overflow and division by zero dont throw std::exceptions. 
 void unfortunate_conversion(int a){
 	while(true){a += 1; if(a < 0){break;}}
 	cout << "A has become negitive with the value" << a << endl; 
@@ -52,7 +53,16 @@ void results(int& x, float& y, long double& z){
 	//int& s = (x > y ? x: 1); //error 1 is not an lval; 
 	//int& s = (x > y ? d : y); //alright; 
 	cout << *p << " " << *r << " "<< '\n'; 
-} 
+}
+//Result of evaluating a full-expression in absence of the order of evaluation is usually undefiend for instance: 
+int f1(int a){return a;}
+int f2(int a){return a;}
+//operators sequenceing(,), && and || garuntees that their left hand operand is evaluated first than their right hand oeprand. Moreover, for builtin type the oeprator && and || often acts as a short-circuit operator meaning they are often not calculated if their first argument doesnt meet the true condition i.e. for and if first operand is true and for or if first operand is not false. 
+void sequencing_operator(int a, int b){
+	b=(a=2, a+1); //first assign a to 2 then increment it and assign 3 to b
+	cout << b << endl; 
+}
+//The order of evaluation of the function arguments is also order-independent, meaning any function arguement could be parsed by the compiler first. Usually programming in a order dependent context is often a bad idea. Consequently we should avoid such order-dependent expression such as an expression involving assignment multiple times in a single expression if not necessary.  
 int main(){
 	operator_eval(1, 2, 3); 
 	long_sequence_to_consider_for_a_token(12); 
@@ -64,5 +74,11 @@ int main(){
 	results(x, y, z);  
 	int a = 0; 
 	unfortunate_conversion(a); 
+	int z1 = f1(1) + f2(2); //undefined wheter f1 got called first or f2 got called first. 
+	int i = 1; 
+	int v1[3]{1, 2, 3}; 
+	v1[i] = ++i; //undefined wheter i++ is done first or assignment meaning wheter its being evaluated as v1[1] = 2 or v1[2] = 1; 
+	cout << v1[1] << " " << v1[2] << endl; 	
+	sequencing_operator(2, 3); 
 	return 0; 
 }
